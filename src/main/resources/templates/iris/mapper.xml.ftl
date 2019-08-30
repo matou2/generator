@@ -29,11 +29,23 @@
     <#if baseColumnList>
         <!-- 通用查询结果列 -->
         <sql id="Base_Column_List">
-            <#list table.commonFields as field>
-                ${field.name},
-            </#list>
             ${table.fieldNames}
         </sql>
 
     </#if>
+
+    <insert id="insert" parameterType="${package.Entity}.${entity}">
+        INSERT	INTO ${table.name}
+        (
+        <#list table.fields as field>
+            ${field.name}<#if field_has_next>,</#if>
+        </#list>
+        )
+        VALUES
+        (
+        <#list table.fields as field>
+            ${r'#{'}${field.propertyName}${r'}'}<#if field_has_next>,</#if>
+        </#list>
+        )
+    </insert>
 </mapper>
